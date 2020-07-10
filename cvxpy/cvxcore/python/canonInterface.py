@@ -131,14 +131,14 @@ def reduce_problem_data_tensor(A, var_length, quad_form=False):
         n_cols += 1
     n_constr = A.shape[0] // (n_cols)
     shape = (n_constr, n_cols)
-    indices = nonzero_rows % (n_constr)
+    indices = np.mod(nonzero_rows, n_constr)
 
     # cols holds the column corresponding to each row in nonzero_rows
-    cols = nonzero_rows // n_constr
+    cols = np.floor_divide(nonzero_rows, n_constr, dtype=np.int64)
 
     # construction of the indptr: scan through cols, and find
     # the structure of the column index pointer
-    indptr = np.zeros(n_cols + 1, dtype=np.int32)
+    indptr = np.zeros(n_cols + 1, dtype=np.int64)
     i = 0
     j = 1
     nnz = cols.size
